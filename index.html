@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hiếu Trần Gia</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+    overflow:hidden;
+    background:#0f0c29;
+    color:white;
+}
+
+/* Loading screen */
+#loader{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    z-index:9999;
+    animation: fadeOut 1s ease 2s forwards;
+}
+
+@keyframes fadeOut{
+    to{opacity:0;visibility:hidden;}
+}
+
+/* Particle canvas */
+#particles{
+    position:fixed;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+/* Card */
+.card{
+    position:relative;
+    top:50%;
+    transform:translateY(-50%);
+    margin:auto;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+    padding:40px 30px;
+    border-radius:25px;
+    width:350px;
+    text-align:center;
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+}
+
+.avatar{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:3px solid #00f5ff;
+    margin-bottom:20px;
+}
+
+.bio{font-size:14px;opacity:0.7;margin-bottom:25px;}
+
+.link{
+    display:block;
+    text-decoration:none;
+    color:white;
+    padding:14px;
+    border-radius:50px;
+    margin:12px 0;
+    background:linear-gradient(90deg,#00f5ff,#00c3ff);
+    transition:0.3s;
+}
+
+.link:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px #00f5ff;
+}
+
+.counter{
+    font-size:12px;
+    opacity:0.7;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="loader">Loading...</div>
+
+<canvas id="particles"></canvas>
+
+<div class="card">
+    <img src="https://via.placeholder.com/150" class="avatar">
+    <h1>Hiếu Trần Gia</h1>
+    <div class="bio">Digital Creator | Developer | Gamer</div>
+
+    <a class="link" href="https://facebook.com/yourlink" target="_blank" onclick="countClick('fb')">
+        Facebook
+        <div class="counter" id="fb-count">Clicks: 0</div>
+    </a>
+
+    <a class="link" href="https://instagram.com/yourlink" target="_blank" onclick="countClick('ig')">
+        Instagram
+        <div class="counter" id="ig-count">Clicks: 0</div>
+    </a>
+
+    <a class="link" href="https://tiktok.com/@yourlink" target="_blank" onclick="countClick('tt')">
+        TikTok
+        <div class="counter" id="tt-count">Clicks: 0</div>
+    </a>
+
+</div>
+
+<!-- Nhạc nền -->
+<audio autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Click counter using localStorage
+function countClick(id){
+    let count = localStorage.getItem(id) || 0;
+    count++;
+    localStorage.setItem(id,count);
+    document.getElementById(id+'-count').innerText = "Clicks: "+count;
+}
+
+['fb','ig','tt'].forEach(id=>{
+    let count = localStorage.getItem(id) || 0;
+    document.getElementById(id+'-count').innerText = "Clicks: "+count;
+});
+
+// Particle animation
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<100;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        dx:(Math.random()-0.5),
+        dy:(Math.random()-0.5)
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        p.x+=p.dx;
+        p.y+=p.dy;
+        if(p.x<0||p.x>canvas.width) p.dx*=-1;
+        if(p.y<0||p.y>canvas.height) p.dy*=-1;
+    });
+    requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
